@@ -39,13 +39,13 @@ public class CommandDispatcher {
             throw new DukeException("Unable to parse command!");
         }
 
-        Predicate<Command> cmdHandler = commandMap.get(command.type);
+        Predicate<Command> cmdHandler = commandMap.get(command.getType());
         if (cmdHandler != null) {
             return cmdHandler.test(command);
         } else if (defaultHandler != null) {
             return defaultHandler.test(command);
         } else {
-            throw new DukeException(String.format("Unknown command %s.", command.type));
+            throw new DukeException(String.format("Unknown command %s.", command.getType()));
         }
     }
 }

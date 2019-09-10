@@ -10,19 +10,19 @@ public class CommandTest {
     public void testBasicCommand() {
         Command c = Command.parse("hello world");
         assertNotNull(c);
-        assertEquals(c.type, "hello");
-        assertEquals(c.arguments, "world");
-        assertTrue(c.namedArguments.isEmpty());
+        assertEquals(c.getType(), "hello");
+        assertEquals(c.getArguments(), "world");
+        assertTrue(c.getNamedArguments().isEmpty());
     }
 
     @Test
     public void testSwitchCommand() {
         Command c = Command.parse("one two three /four /five six");
         assertNotNull(c);
-        assertEquals(c.type, "one");
-        assertEquals(c.arguments, "two three");
-        assertEquals(c.namedArguments.size(), 2);
-        assertEquals(c.namedArguments.get("four"), "");
-        assertEquals(c.namedArguments.get("five"), "six");
+        assertEquals(c.getType(), "one");
+        assertEquals(c.getArguments(), "two three");
+        assertEquals(c.getNamedArguments().size(), 2);
+        assertEquals(c.getNamedArguments().get("four"), "");
+        assertEquals(c.getNamedArguments().get("five"), "six");
     }
 }

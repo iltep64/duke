@@ -1,5 +1,6 @@
 package org.duke.cmd;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -10,10 +11,11 @@ import java.util.regex.Pattern;
 public class Command {
     private static final Pattern switchBoundary = Pattern.compile("\\s+/");
     private static final Pattern cmdBoundary = Pattern.compile("\\s+");
-    public final String type;
-    public final String arguments;
-    public final Map<String, String> namedArguments;
-    public Command(String type, String arguments, Map<String, String> namedArguments) {
+    private final String type;
+    private final String arguments;
+    private final Map<String, String> namedArguments;
+
+    private Command(String type, String arguments, Map<String, String> namedArguments) {
         this.type = type;
         this.arguments = arguments;
         this.namedArguments = namedArguments;
@@ -64,6 +66,18 @@ public class Command {
                 namedArguments.put(switchName, switchArguments);
             }
         }
-        return new Command(type, arguments, namedArguments);
+        return new Command(type, arguments, Collections.unmodifiableMap(namedArguments));
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getArguments() {
+        return arguments;
+    }
+
+    public Map<String, String> getNamedArguments() {
+        return namedArguments;
     }
 }

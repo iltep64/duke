@@ -78,8 +78,8 @@ public class Duke {
     }
 
     private boolean makeDeadlineTask(Command input) {
-        String description = input.arguments;
-        String deadline = input.namedArguments.get("by");
+        String description = input.getArguments();
+        String deadline = input.getNamedArguments().get("by");
         if (deadline == null) {
             deadline = "unknown";
         }
@@ -91,8 +91,8 @@ public class Duke {
     }
 
     private boolean makeEventTask(Command input) {
-        String description = input.arguments;
-        String timing = input.namedArguments.get("at");
+        String description = input.getArguments();
+        String timing = input.getNamedArguments().get("at");
         if (timing == null) {
             timing = "unknown";
         }
@@ -104,14 +104,14 @@ public class Duke {
     }
 
     private boolean makeToDoTask(Command input) {
-        this.addTask(new Task(input.arguments));
+        this.addTask(new Task(input.getArguments()));
         return false;
     }
 
     private boolean markAsDone(Command input) {
         int index;
         try {
-            index = Integer.parseInt(input.arguments);
+            index = Integer.parseInt(input.getArguments());
         } catch (NumberFormatException e) {
             throw new DukeException("Index provided was not an integer!", e);
         }
@@ -129,7 +129,7 @@ public class Duke {
 
     private boolean findTasks(Command input) {
         this.io.say("Here are the matching tasks in your list:");
-        String target = input.arguments.toLowerCase();
+        String target = input.getArguments().toLowerCase();
         this.io.say(this.taskList.stream()
                 .filter(task ->
                         task.getDescription().toLowerCase().contains(target))
@@ -142,7 +142,7 @@ public class Duke {
     private boolean deleteTask(Command input) {
         int index;
         try {
-            index = Integer.parseInt(input.arguments);
+            index = Integer.parseInt(input.getArguments());
         } catch (NumberFormatException e) {
             throw new DukeException("Index provided was not an integer!", e);
         }
