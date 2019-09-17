@@ -1,20 +1,8 @@
 package org.duke;
 
 import org.duke.cmd.*;
-import org.duke.json.JsonParser;
-import org.duke.json.JsonWriter;
-import org.duke.json.ValueHandler;
-import org.duke.task.DeadlineTask;
-import org.duke.task.EventTask;
 import org.duke.task.Task;
-import org.duke.task.TaskType;
 import org.duke.ui.DukeIO;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Main class for Duke.
@@ -25,10 +13,10 @@ public class Duke {
             "Hello! I'm Duke",
             "What can I do for you?"
     };
-    private static final String SAVE_PATH = "./duke.json";
     private final CommandDispatcher dispatcher;
     private final DukeIO io;
-    private ArrayList<Task> taskList;
+    private TaskStorage taskStorage;
+
     public Duke(DukeIO io) {
         this.io = io;
 
@@ -59,56 +47,36 @@ public class Duke {
     }
 
     public void addTask(Task t) {
-        this.taskList.add(t);
+        this.taskStorage.add(t);
         this.io.say(
                 "Got it. I've added this task:",
                 "  " + t,
                 String.format("Now you have %d task%s in the list.",
-                        this.taskList.size(),
-                        this.taskList.size() == 1 ? "" : "s")
+                        this.taskStorage.size(),
+                        this.taskStorage.size() == 1 ? "" : "s")
         );
     }
 
-    private ArrayList<Task> loadStorage() {
-        try (FileReader read = new FileReader(SAVE_PATH)) {
-            return JsonParser.parse(read, ValueHandler.listOf(new TaskType.Builder()));
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
-        } catch (IOException e) {
-            throw new DukeException("Unable to load saved data", e);
-        }
-    }
-
-    private void saveStorage(ArrayList<Task> tasks) {
-        try (FileWriter write = new FileWriter(SAVE_PATH);
-             JsonWriter jw = new JsonWriter(write)) {
-            jw.writeValue(tasks);
-        } catch (Exception e) {
-            throw new DukeException(e);
-        }
-    }
-
     public void run() {
-        this.loadStorage();
         //Start off greeting the user.
         this.io.withDialogBlock(() -> {
             this.io.say(initialGreeting);
-            this.taskList = this.loadStorage();
+            this.taskStorage = TaskStorage.load();
         });
 
         //Start listen loop.
         this.io.listen();
     }
 
-    public void save() {
-        this.io.withDialogBlock(() -> this.saveStorage(this.taskList));
-    }
-
     public DukeIO getIo() {
         return this.io;
     }
 
-    public ArrayList<Task> getTaskList() {
-        return this.taskList;
+    public void save() {
+        this.io.withDialogBlock(taskStorage::save);
+    }
+
+    public TaskStorage getTaskStorage() {
+        return taskStorage;
     }
 }

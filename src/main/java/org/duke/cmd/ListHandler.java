@@ -11,9 +11,9 @@ public class ListHandler extends Handler {
     protected void handleNoExit(Duke duke, Command command) {
         DukeIO io = duke.getIo();
         io.say("Here are the tasks in your list:");
-        io.say(duke.getTaskList().stream()
+        io.say(duke.getTaskStorage().stream()
+                .map(new CounterDecorator<>(1))
                 .map(Object::toString)
-                .map(new CounterDecorator(1))
                 .iterator());
     }
 }

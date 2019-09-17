@@ -16,11 +16,11 @@ public class DoneHandler extends Handler {
             throw new DukeException("Index provided was not an integer!", e);
         }
 
-        if (index < 0 || index > duke.getTaskList().size()) {
+        if (index < 0 || index > duke.getTaskStorage().size()) {
             throw new DukeException("There's no task with that index!");
         }
 
-        Task selectedTask = duke.getTaskList().get(index - 1);
+        Task selectedTask = duke.getTaskStorage().get(index - 1);
         selectedTask.markComplete();
         duke.getIo().say("Nice! I've marked this task as done:",
                 "  " + selectedTask);

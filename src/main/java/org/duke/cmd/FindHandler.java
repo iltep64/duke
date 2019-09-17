@@ -12,11 +12,11 @@ public class FindHandler extends Handler {
         DukeIO io = duke.getIo();
         io.say("Here are the matching tasks in your list:");
         String target = command.getArguments().toLowerCase();
-        io.say(duke.getTaskList().stream()
-                .filter(task ->
-                        task.getDescription().toLowerCase().contains(target))
+        io.say(duke.getTaskStorage().stream()
+                .map(new CounterDecorator<>(1))
+                .filter(taskpair ->
+                        taskpair.value.getDescription().toLowerCase().contains(target))
                 .map(Object::toString)
-                .map(new CounterDecorator(1))
                 .iterator());
     }
 }
