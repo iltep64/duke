@@ -14,12 +14,12 @@ repositories {
 
 javafx {
     version = "11.0.2"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.base']
 }
 
 application {
     // Change this to your main class.
-    mainClassName = "org.duke.ui.javafx.DukeFx"
+    mainClassName = "org.duke.ui.javafx.DukeMain"
 }
 
 dependencies {
@@ -32,7 +32,7 @@ test {
 
 shadowJar {
     archiveBaseName = "duke"
-    archiveVersion = "0.1.0"
+    archiveVersion = "0.2.0"
     archiveClassifier = null
     archiveAppendix = null
 }
