@@ -1,19 +1,10 @@
 package org.duke.ui.javafx;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -33,71 +24,21 @@ import java.util.function.Supplier;
 
 public class DukeFx extends Application {
 
-    private static final Duration SCROLL_DELAY = Duration.millis(200);
-    private final TextArea inputBox = new TextArea();
+    public static final Duration SCROLL_DELAY = Duration.millis(200);
     private final DukeFxIO io = new DukeFxIO();
-    private final Font baseFont = Font.font(20);
+    public static final Font BASE_FONT = Font.font(20);
 
-    private final BorderStroke stroke = new BorderStroke(Color.BLACK,
+    private static final BorderStroke stroke = new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID, new CornerRadii(5), BorderWidths.DEFAULT);
-    private final Border msgboxBorder = new Border(stroke);
+    public static final Border MSGBOX_BORDER = new Border(stroke);
+
+    private DukeRootPane root;
     private Stage stage;
-    private VBox outputCol;
 
     public static void main(String[] args) {
         Application.launch(args);
     }
 
-    private void onSubmit() {
-        String input = inputBox.getText();
-        if (!input.isEmpty()) {
-            inputBox.clear();
-            displayMessage(UserInfo.USER, input);
-            io.sendCommand(input);
-        }
-    }
-
-    private void displayMessage(UserInfo user, String message) {
-        Label msgText = new Label(message);
-        msgText.setFont(baseFont);
-
-        Label userLabel = new Label(user.getName());
-        userLabel.setFont(baseFont);
-        userLabel.setTextFill(user.getNameColor());
-        userLabel.setUnderline(true);
-
-        Pos textAlignment = user.getAlignmentPosition();
-        msgText.setAlignment(textAlignment);
-        userLabel.setAlignment(textAlignment);
-
-        VBox msg = new VBox(userLabel, msgText);
-        msg.setAlignment(textAlignment);
-        msg.setPadding(new Insets(10));
-        msg.setBorder(msgboxBorder);
-        msg.setBackground(user.getBackground());
-
-        outputCol.getChildren().add(msg);
-    }
-
-    private BorderPane makeUserInputPane() {
-        inputBox.setFont(baseFont);
-        inputBox.addEventFilter(KeyEvent.ANY, evt -> {
-            if (evt.getCode() == KeyCode.ENTER || "\n".equals(evt.getCharacter())) {
-                evt.consume();
-                this.onSubmit();
-            }
-        });
-
-        Button submitBtn = new Button("Submit");
-        submitBtn.setFont(baseFont);
-        submitBtn.setDefaultButton(true);
-        submitBtn.setMaxHeight(Double.MAX_VALUE);
-        submitBtn.setOnAction(evt -> this.onSubmit());
-
-        BorderPane pane = new BorderPane(inputBox);
-        pane.setRight(submitBtn);
-        return pane;
-    }
 
     @Override
     public void start(Stage stage) {
@@ -107,26 +48,12 @@ public class DukeFx extends Application {
         stage.setOnCloseRequest(
                 evt -> io.shutdown());
 
-        outputCol = new VBox();
-        outputCol.setPadding(new Insets(100));
-        outputCol.setSpacing(50);
-
-        ScrollPane outputScroll = new ScrollPane(outputCol);
-        outputScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        outputScroll.setFitToWidth(true);
-
-        //Bind auto-scroll of message pane
-        Timeline scrollAnim = new Timeline(60);
-        scrollAnim.getKeyFrames().add(new KeyFrame(SCROLL_DELAY,
-                new KeyValue(outputScroll.vvalueProperty(), 1)));
-        outputCol.heightProperty().addListener(obs -> scrollAnim.play());
-
-        BorderPane mainPane = new BorderPane(outputScroll);
-        mainPane.setBottom(makeUserInputPane());
-
-        Scene scene = new Scene(mainPane); // Setting the scene to be our Label
-        stage.setScene(scene); // Setting the stage to show our screen
-        stage.show(); // Render the stage.
+        root = new DukeRootPane();
+        root.setInputHandler(io::sendCommand);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Duke");
+        stage.show();
     }
 
     private void startClose() {
@@ -158,7 +85,7 @@ public class DukeFx extends Application {
             dukeExecutor.shutdown();
         }
 
-        private void startDuke() {
+        void startDuke() {
             dukeExecutor.execute(duke::run);
         }
 
@@ -200,7 +127,7 @@ public class DukeFx extends Application {
                     //Delete trailing newline
                     sb.deleteCharAt(sb.length() - 1);
                 }
-                displayMessage(UserInfo.DUKE, sb.toString());
+                root.displayMessage(UserInfo.DUKE, sb.toString());
             });
             return ret;
         }

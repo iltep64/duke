@@ -1,0 +1,36 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.duke.ui.javafx.DukeFx?>
+<?import javafx.geometry.Insets?>
+
+<fx:root xmlns:fx="http://javafx.com/fxml" type="javafx.scene.layout.BorderPane">
+    <center>
+        <ScrollPane fx:id="outputScroll" hbarPolicy="NEVER" fitToWidth="true">
+            <VBox fx:id="outputCol" spacing="50">
+                <padding>
+                    <Insets topRightBottomLeft="100"/>
+                </padding>
+            </VBox>
+        </ScrollPane>
+
+    </center>
+    <bottom>
+        <BorderPane>
+            <center>
+                <TextArea fx:id="inputBox" maxWidth="Infinity">
+                    <font>
+                        <DukeFx fx:constant="BASE_FONT"/>
+                    </font>
+                </TextArea>
+            </center>
+            <right>
+                <Button fx:id="submitButton" defaultButton="true" maxHeight="Infinity">
+                    <font>
+                        <DukeFx fx:constant="BASE_FONT"/>
+                    </font>
+                    Submit
+                </Button>
+            </right>
+        </BorderPane>
+    </bottom>
+</fx:root>
