@@ -4,20 +4,22 @@
 <?import javafx.geometry.Insets?>
 
 <fx:root xmlns:fx="http://javafx.com/fxml" type="javafx.scene.layout.HBox">
-    <Label fx:id="userIcon">
-        <font>
-            <DukeFx fx:constant="BASE_FONT"/>
-        </font>
-        <contentDisplay>
-            <ContentDisplay fx:constant="TOP"/>
-        </contentDisplay>
-        <underline>true</underline>
-    </Label>
-    <Label fx:id="messageText">
-        <font>
-            <DukeFx fx:constant="BASE_FONT"/>
-        </font>
-    </Label>
+    <fx:define>
+        <Label fx:id="userIcon">
+            <font>
+                <DukeFx fx:constant="BASE_FONT"/>
+            </font>
+            <contentDisplay>
+                <ContentDisplay fx:constant="TOP"/>
+            </contentDisplay>
+            <underline>true</underline>
+        </Label>
+        <Label fx:id="messageText">
+            <font>
+                <DukeFx fx:constant="BASE_FONT"/>
+            </font>
+        </Label>
+    </fx:define>
     <spacing>10.0</spacing>
     <padding>
         <Insets topRightBottomLeft="10.0"/>

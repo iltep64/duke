@@ -41,7 +41,6 @@ public class Message extends HBox {
         setAlignment(textAlignment);
         setBackground(user.getBackground());
 
-        this.getChildren().clear();
         if (user.getAlignmentPosition().getHpos() == HPos.LEFT) {
             this.getChildren().addAll(userIcon, messageText);
         } else {
