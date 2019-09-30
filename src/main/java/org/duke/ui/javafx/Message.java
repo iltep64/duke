@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -17,9 +18,9 @@ public class Message extends HBox {
     private Label userIcon;
 
     @FXML
-    private Label messageText;
+    private Node message;
 
-    public Message(UserInfo user) {
+    public Message(UserInfo user, Node message) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Message.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -30,24 +31,34 @@ public class Message extends HBox {
             throw new DukeException(e);
         }
 
+        this.message = message;
+
         userIcon.setText(user.getName());
         userIcon.setGraphic(new ImageView(user.getImage()));
         userIcon.setTextFill(user.getNameColor());
 
         Pos textAlignment = user.getAlignmentPosition();
-        messageText.setAlignment(textAlignment);
+        //message.setAlignment(textAlignment);
         userIcon.setAlignment(textAlignment);
 
         setAlignment(textAlignment);
         setBackground(user.getBackground());
 
         if (user.getAlignmentPosition().getHpos() == HPos.LEFT) {
-            this.getChildren().addAll(userIcon, messageText);
+            this.getChildren().addAll(userIcon, message);
         } else {
-            this.getChildren().addAll(messageText, userIcon);
+            this.getChildren().addAll(message, userIcon);
         }
     }
 
+    public Node getMessage() {
+        return message;
+    }
+
+    public void setMessage(Node message) {
+        this.message = message;
+    }
+/*
     public StringProperty textProperty() {
         return messageText.textProperty();
     }
@@ -59,4 +70,5 @@ public class Message extends HBox {
     public void setText(String value) {
         messageText.setText(value);
     }
+    */
 }

@@ -7,7 +7,9 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -17,6 +19,7 @@ import javafx.scene.layout.VBox;
 import org.duke.DukeException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class DukeRootPane extends BorderPane {
@@ -81,8 +84,15 @@ public class DukeRootPane extends BorderPane {
     }
 
     public void displayMessage(UserInfo user, String message) {
-        Message msg = new Message(user);
-        msg.setText(message);
+        Label messageText = new Label(message);
+        messageText.setFont(DukeFx.BASE_FONT);
+        messageText.setAlignment(user.getAlignmentPosition());
+        displayMessage(user, List.of(messageText));
+    }
+
+    public void displayMessage(UserInfo user, List<Node> nodes) {
+        VBox messageBody = new VBox(nodes.toArray(new Node[0]));
+        Message msg = new Message(user, messageBody);
         outputCol.getChildren().add(msg);
     }
 }

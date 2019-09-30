@@ -70,4 +70,8 @@ public class CommandDispatcher {
     public Set<Handler> getHandlers() {
         return Collections.unmodifiableSet(this.handlers);
     }
+
+    public Handler getHandlerFor(String cmd) {
+        return commandMap.get(cmd);
+    }
 }

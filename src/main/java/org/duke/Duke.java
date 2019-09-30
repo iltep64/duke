@@ -11,7 +11,8 @@ public class Duke {
 
     private static final String[] initialGreeting = new String[]{
             "Hello! I'm Duke",
-            "What can I do for you?"
+            "What can I do for you?",
+            "Type 'help' for a list of commands."
     };
     private final CommandDispatcher dispatcher;
     private final DukeIO io;

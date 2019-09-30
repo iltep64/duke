@@ -2,6 +2,7 @@ package org.duke.ui;
 
 import org.duke.DukeException;
 import org.duke.cmd.CommandDispatcher;
+import org.duke.cmd.Handler;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -27,6 +28,14 @@ public interface DukeIO {
      */
     default void say(String... lines) {
         say(Arrays.asList(lines).iterator());
+    }
+
+    default void sayCommand(Handler handler) {
+        say(handler.getDescriptionLine());
+    }
+
+    default void sayBriefCommand(Handler handler) {
+        say(handler.getDescriptionLine(), handler.getSyntaxLine());
     }
 
     /**

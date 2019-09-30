@@ -58,15 +58,15 @@ public abstract class Handler {
         return this.getBindings()[0].value();
     }
 
-    private Binding[] getBindings() {
+    public Binding[] getBindings() {
         return this.getClass().getAnnotationsByType(Binding.class);
     }
 
-    private Description getDescriptionText()  {
+    public Description getDescriptionText()  {
         return this.getClass().getAnnotation(Description.class);
     }
 
-    private NamedArgument[] getNamedArguments() {
+    public NamedArgument[] getNamedArguments() {
         return this.getClass().getAnnotationsByType(NamedArgument.class);
     }
 
@@ -87,6 +87,7 @@ public abstract class Handler {
     public @interface Description {
         String value();
         String argument() default "";
+        boolean optional() default false;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
