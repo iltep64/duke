@@ -1,6 +1,17 @@
 package org.duke;
 
-import org.duke.cmd.*;
+import org.duke.cmd.ByeHandler;
+import org.duke.cmd.Command;
+import org.duke.cmd.CommandDispatcher;
+import org.duke.cmd.DeadlineTaskHandler;
+import org.duke.cmd.DeleteHandler;
+import org.duke.cmd.DoneHandler;
+import org.duke.cmd.EventTaskHandler;
+import org.duke.cmd.FindHandler;
+import org.duke.cmd.Handler;
+import org.duke.cmd.HelpHandler;
+import org.duke.cmd.ListHandler;
+import org.duke.cmd.TodoTaskHandler;
 import org.duke.task.Task;
 import org.duke.ui.DukeIO;
 

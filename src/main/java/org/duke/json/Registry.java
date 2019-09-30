@@ -10,9 +10,9 @@ import java.util.function.BiConsumer;
  * Registry mapping Java classes to appropriate JSON encoder functions.
  */
 public class Registry {
-    private static HashMap<Class<?>, BiConsumer<JsonWriter.ValueContext, ?>> encoderMap
+    private static final HashMap<Class<?>, BiConsumer<JsonWriter.ValueContext, ?>> encoderMap
             = new HashMap<>();
-    private static HashMap<Class<?>, BiConsumer<JsonWriter.ValueContext, ?>> encoderCache
+    private static final HashMap<Class<?>, BiConsumer<JsonWriter.ValueContext, ?>> encoderCache
             = new HashMap<>();
 
     static {
@@ -29,8 +29,8 @@ public class Registry {
                         (Map<?, ?>) map,
                         JsonWriter.ValueContext::writeValue));
         register(Number.class, (ctx, val) -> ctx.writeNumber(val.doubleValue()));
-        register(String.class, (ctx, str) -> ctx.writeString(str));
-        register(Boolean.class, (ctx, b) -> ctx.writeBoolean(b));
+        register(String.class, JsonWriter.ValueContext::writeString);
+        register(Boolean.class, JsonWriter.ValueContext::writeBoolean);
         register(Object.class, (ctx, obj) -> ctx.writeString(obj.toString()));
     }
 
@@ -46,6 +46,7 @@ public class Registry {
         while (!Object.class.equals(current)) {
             BiConsumer<JsonWriter.ValueContext, ?> encoder = encoderMap.get(current);
             if (encoder != null) {
+                //noinspection unchecked
                 return (BiConsumer<JsonWriter.ValueContext, T>) encoder;
             }
             current = current.getSuperclass();
@@ -57,6 +58,7 @@ public class Registry {
                     Class<?> c = (Class<?>) iface;
                     BiConsumer<JsonWriter.ValueContext, ?> encoder = encoderMap.get(c);
                     if (encoder != null) {
+                        //noinspection unchecked
                         return (BiConsumer<JsonWriter.ValueContext, T>) encoder;
                     }
                 }
@@ -66,6 +68,7 @@ public class Registry {
 
         BiConsumer<JsonWriter.ValueContext, ?> encoder = encoderMap.get(Object.class);
         if (encoder != null) {
+            //noinspection unchecked
             return (BiConsumer<JsonWriter.ValueContext, T>) encoder;
         }
         throw new JsonException("No handler for class %s", clazz);
@@ -73,6 +76,7 @@ public class Registry {
 
     public static <T> BiConsumer<JsonWriter.ValueContext, T> getEncoder(Class<? extends T> clazz) {
         if (encoderCache.containsKey(clazz)) {
+            //noinspection unchecked
             return (BiConsumer<JsonWriter.ValueContext, T>) encoderCache.get(clazz);
         }
         BiConsumer<JsonWriter.ValueContext, T> encoder = getEncoderInner(clazz);

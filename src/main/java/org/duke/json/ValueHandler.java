@@ -12,7 +12,7 @@ public interface ValueHandler<T> {
     static <T> ValueHandler<ArrayList<T>> listOf(ValueHandler<T> elemHandler) {
         return new ValueHandler<>() {
             public ArrayHandler<ArrayList<T>> handleArray() {
-                return new ArrayHandler.ListValue<T>(elemHandler);
+                return new ArrayHandler.ListValue<>(elemHandler);
             }
         };
     }

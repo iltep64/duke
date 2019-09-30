@@ -15,7 +15,7 @@ public class JsonWriter implements AutoCloseable {
 
     private final Writer writer;
     private int indentationLevel = 0;
-    private ValueContext valueContext = new ValueContext();
+    private final ValueContext valueContext = new ValueContext();
 
     /**
      * Constructs a JsonWriter wrapping a output writer.
@@ -122,7 +122,7 @@ public class JsonWriter implements AutoCloseable {
     /**
      * Flushes the underlying Writer.
      *
-     * @throws IOException
+     * @throws IOException Throws any exception from flushing the underlying stream.
      */
     public void flush() throws IOException {
         this.writer.flush();

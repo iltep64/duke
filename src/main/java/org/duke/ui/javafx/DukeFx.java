@@ -8,7 +8,11 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -129,7 +133,7 @@ public class DukeFx extends Application {
 
         private Text makeArgumentNode(String text, boolean optional) {
             Color color;
-            if(optional) {
+            if (optional) {
                 text = " [" + text + "]";
                 color = Color.GREEN;
             } else {
@@ -150,29 +154,29 @@ public class DukeFx extends Application {
             name.setFont(MONO_FONT);
             TextFlow syntaxLine = new TextFlow(name);
 
-            if(!handler.getDescriptionText().argument().isEmpty()) {
+            if (!handler.getDescriptionText().argument().isEmpty()) {
                 String argDesc = handler.getDescriptionText().argument();
                 Text posArgument = makeArgumentNode(argDesc, handler.getDescriptionText().optional());
                 syntaxLine.getChildren().add(posArgument);
             }
 
-            for(Handler.NamedArgument namedArgument : handler.getNamedArguments()) {
+            for (Handler.NamedArgument namedArgument : handler.getNamedArguments()) {
                 String argDesc = "/" + namedArgument.value() + " " + namedArgument.description();
                 syntaxLine.getChildren().add(makeArgumentNode(argDesc, true));
             }
 
             dialogNodes.add(syntaxLine);
 
-            if(handler.getBindings().length > 1) {
+            if (handler.getBindings().length > 1) {
 
                 Text aliasPrefix = new Text("Aliases:");
                 aliasPrefix.setFont(BASE_FONT);
                 StringBuilder sb = new StringBuilder();
-                for(Handler.Binding bind : handler.getBindings()) {
-                    if(bind.value().equals(handler.getPrimaryBinding())) {
+                for (Handler.Binding bind : handler.getBindings()) {
+                    if (bind.value().equals(handler.getPrimaryBinding())) {
                         continue;
                     }
-                    if(sb.length() > 0) {
+                    if (sb.length() > 0) {
                         sb.append(',');
                     }
                     sb.append(' ').append(bind.value());

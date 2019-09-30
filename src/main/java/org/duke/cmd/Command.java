@@ -23,11 +23,11 @@ public class Command {
 
     /**
      * From user input, parse it into a {@link Command}.
-     * <p>
+     *
      * First word is the main command type.
      * The main arguments are the remainder of words,
      * up til the first named argument or end of string.
-     * <p>
+     *
      * Each named argument starts with a switch "/(name)".
      * The argument spans up til the next named argument or end of string.
      *

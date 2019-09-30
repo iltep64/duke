@@ -1,12 +1,22 @@
 package org.duke.util;
 
 import java.text.ParsePosition;
-import java.time.*;
+import java.time.DateTimeException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.MonthDay;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
-import java.time.temporal.*;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalQuery;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -52,8 +62,10 @@ public class DateParser {
                     .toFormatter(),
             DateTimeFormatter.ISO_LOCAL_TIME
     };
-    private String text;
-    private ParsePosition pos;
+
+    private final String text;
+    private final ParsePosition pos;
+
     private DateParser(String input) {
         this.text = input;
         this.pos = new ParsePosition(0);
@@ -69,8 +81,9 @@ public class DateParser {
     }
 
     /**
-     * Given an input string describing a date+time, return a {@link java.time.LocalDateTime} representing it.
-     * <p>
+     * Given an input string describing a date+time,
+     * return a {@link java.time.LocalDateTime} representing it.
+     *
      * If the input specifies a specific date, we use that date.
      * Else, it returns the next matching date in the future.
      *
@@ -94,7 +107,8 @@ public class DateParser {
     private <R> R tryParse(DateTimeFormatter formatter,
                            TemporalQuery<R> query) {
         eatWhitespace();
-        int ix = pos.getIndex(), errIx = pos.getErrorIndex();
+        int ix = pos.getIndex();
+        int errIx = pos.getErrorIndex();
         try {
             TemporalAccessor parsed = formatter.parse(text, pos);
             R value = query.queryFrom(parsed);
@@ -121,6 +135,7 @@ public class DateParser {
                         return value;
                     }
                 } catch (DateTimeException e) {
+                    //Swallow any failed parse.
                 }
             }
             return null;
@@ -143,7 +158,7 @@ public class DateParser {
         if (md.equals(MonthDay.of(2, 29))) {
             yearStream = yearStream.filter(y -> Year.of(y).isLeap());
         }
-        return yearStream.mapToObj(y -> md.atYear(y))
+        return yearStream.mapToObj(md::atYear)
                 .filter(date -> date.isAfter(now));
     }
 
@@ -157,6 +172,10 @@ public class DateParser {
                 .findFirst().orElse(null);
     }
 
+    /**
+     * Parse into a {@link LocalDateTime} object based off the given user input.
+     * @return Best-guess {@link LocalDateTime} representing the input
+     */
     public LocalDateTime parseDateTime() {
         for (DateTimeFormatter dt : dateFormatters) {
             LocalDateTime date = tryParses(dt,

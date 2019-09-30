@@ -9,8 +9,14 @@ import java.util.ArrayList;
  * @param <T> Value to produce
  */
 public interface ArrayHandler<T> {
+    /**
+     * Construct a {@link ValueHandler} reading a list of values, using the given value handler.
+     * @param valueHandler Value handler for each element.
+     * @param <T> Element type
+     * @return A {@link ValueHandler} reading an {@link ArrayList} of {@code T} values.
+     */
     static <T> ValueHandler<ArrayList<T>> listOf(ValueHandler<T> valueHandler) {
-        return new ValueHandler<ArrayList<T>>() {
+        return new ValueHandler<>() {
             public ArrayHandler<ArrayList<T>> handleArray() {
                 return new ListValue<>(valueHandler);
             }

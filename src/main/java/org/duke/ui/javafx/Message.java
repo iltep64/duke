@@ -1,6 +1,5 @@
 package org.duke.ui.javafx;
 
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -50,25 +49,4 @@ public class Message extends HBox {
             this.getChildren().addAll(message, userIcon);
         }
     }
-
-    public Node getMessage() {
-        return message;
-    }
-
-    public void setMessage(Node message) {
-        this.message = message;
-    }
-/*
-    public StringProperty textProperty() {
-        return messageText.textProperty();
-    }
-
-    public String getText() {
-        return messageText.getText();
-    }
-
-    public void setText(String value) {
-        messageText.setText(value);
-    }
-    */
 }

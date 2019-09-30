@@ -1,7 +1,6 @@
 package org.duke.ui.javafx;
 
 import javafx.geometry.Insets;
-import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -39,15 +38,6 @@ public class UserInfo {
 
     public Pos getAlignmentPosition() {
         return alignmentPosition;
-    }
-
-    public NodeOrientation getOrdering() {
-        switch (alignmentPosition.getHpos()) {
-        case RIGHT:
-        default:
-        case LEFT:
-            return NodeOrientation.LEFT_TO_RIGHT;
-        }
     }
 
     public Background getBackground() {
